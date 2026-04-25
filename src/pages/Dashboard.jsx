@@ -7,29 +7,29 @@ export default function Dashboard({ transacoes }) {
     .filter((t) => t.tipo === "saida")
     .reduce((acc, t) => acc + t.valor, 0);
 
-  const total = entradas - saidas;
+  const saldo = entradas - saidas;
 
   return (
-    <div className="container">
+    <div className="dashboard-container">
       <h2>Dashboard</h2>
 
-      <div className="dashboard-grid">
-
-        <div className="dashboard-card entrada">
-          <h3>Entradas</h3>
-          <p>R$ {entradas.toFixed(2)}</p>
+      <div className="dashboard-resumo">
+        <div className="card-resumo entrada">
+          <p>Entradas</p>
+          <h3>R$ {entradas.toFixed(2)}</h3>
         </div>
 
-        <div className="dashboard-card saida">
-          <h3>Saídas</h3>
-          <p>R$ {saidas.toFixed(2)}</p>
+        <div className="card-resumo saida">
+          <p>Saídas</p>
+          <h3>R$ {saidas.toFixed(2)}</h3>
         </div>
 
-        <div className="dashboard-card total">
-          <h3>Saldo</h3>
-          <p>R$ {total.toFixed(2)}</p>
+        <div className="card-resumo saldo">
+          <p>Saldo</p>
+          <h3 style={{ color: saldo >= 0 ? "#22c55e" : "#ef4444" }}>
+            R$ {saldo.toFixed(2)}
+          </h3>
         </div>
-
       </div>
     </div>
   );

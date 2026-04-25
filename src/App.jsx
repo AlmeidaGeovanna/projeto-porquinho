@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+
 import Layout from "./componentes/Layout";
 import Inicio from "./pages/Inicio";
 import Transacoes from "./pages/Transacoes";
 import Dashboard from "./pages/Dashboard";
+import Historico from "./pages/Historico";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,13 +13,16 @@ import "./App.css";
 
 export default function App() {
   const [transacoes, setTransacoes] = useState([]);
-  const [editando, setEditando] = useState(null);
 
+  // 🔄 carregar do localStorage
   useEffect(() => {
     const dados = localStorage.getItem("transacoes");
-    if (dados) setTransacoes(JSON.parse(dados));
+    if (dados) {
+      setTransacoes(JSON.parse(dados));
+    }
   }, []);
 
+  // 💾 salvar no localStorage
   useEffect(() => {
     localStorage.setItem("transacoes", JSON.stringify(transacoes));
   }, [transacoes]);
@@ -33,8 +38,6 @@ export default function App() {
             <Transacoes
               transacoes={transacoes}
               setTransacoes={setTransacoes}
-              editando={editando}
-              setEditando={setEditando}
             />
           }
         />
@@ -43,9 +46,19 @@ export default function App() {
           path="/dashboard"
           element={<Dashboard transacoes={transacoes} />}
         />
+
+        <Route
+          path="/historico"
+          element={<Historico transacoes={transacoes} />}
+        />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={2000} theme="dark" />
+      {/* TOAST */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        theme="dark"
+      />
     </Layout>
   );
 }

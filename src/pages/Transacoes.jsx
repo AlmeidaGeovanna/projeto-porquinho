@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import ModalConfirmacao from "../componentes/ModalConfirmacao";
 
 export default function Transacoes({ transacoes, setTransacoes }) {
@@ -11,29 +12,58 @@ export default function Transacoes({ transacoes, setTransacoes }) {
   const [modalAberto, setModalAberto] = useState(false);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
 
+  // 💰 MÁSCARA DE VALOR
+  function handleValor(valorDigitado) {
+    let numeros = valorDigitado.replace(/\D/g, "");
+    let valorNumero = Number(numeros) / 100;
+
+    let formatado = valorNumero.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+    setValor(formatado);
+  }
+
   function adicionarTransacao(e) {
     e.preventDefault();
 
-    if (!descricao || !valor) return;
+    if (!descricao || !valor) {
+      toast.error("Preencha todos os campos!");
+      return;
+    }
+
+    const valorNumerico =
+      Number(valor.replace(/\D/g, "")) / 100;
 
     if (editandoId) {
       const atualizadas = transacoes.map((t) =>
         t.id === editandoId
-          ? { ...t, descricao, valor: Number(valor), tipo }
+          ? {
+              ...t,
+              descricao,
+              valor: valorNumerico,
+              tipo,
+            }
           : t
       );
 
       setTransacoes(atualizadas);
       setEditandoId(null);
+
+      toast.info("Transação atualizada!");
     } else {
       const nova = {
         id: Date.now(),
         descricao,
-        valor: Number(valor),
+        valor: valorNumerico,
         tipo,
+        data: new Date().toISOString(),
       };
 
       setTransacoes([...transacoes, nova]);
+
+      toast.success("Transação adicionada!");
     }
 
     setDescricao("");
@@ -43,7 +73,14 @@ export default function Transacoes({ transacoes, setTransacoes }) {
 
   function editarTransacao(t) {
     setDescricao(t.descricao);
-    setValor(t.valor);
+
+    // 💰 formata valor ao editar
+    const formatado = t.valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+    setValor(formatado);
     setTipo(t.tipo);
     setEditandoId(t.id);
   }
@@ -56,6 +93,8 @@ export default function Transacoes({ transacoes, setTransacoes }) {
   function confirmarExclusao() {
     setTransacoes(transacoes.filter((t) => t.id !== idParaExcluir));
     setModalAberto(false);
+
+    toast.error("Transação removida!");
   }
 
   return (
@@ -64,33 +103,48 @@ export default function Transacoes({ transacoes, setTransacoes }) {
 
       {/* FORM */}
       <form className="form" onSubmit={adicionarTransacao}>
-        <input
-          type="text"
-          placeholder="Descrição"
-          className="input"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-        />
+        <h3 className="form-title">
+          {editandoId ? "Editar transação" : "Nova transação"}
+        </h3>
 
-        <input
-          type="number"
-          placeholder="Valor"
-          className="input"
-          value={valor}
-          onChange={(e) => setValor(e.target.value)}
-        />
+        <div className="form-group">
+          <label>Descrição</label>
+          <input
+            type="text"
+            placeholder="Ex: Mercado, Salário..."
+            className="input"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          />
+        </div>
 
-        <select
-          className="input"
-          value={tipo}
-          onChange={(e) => setTipo(e.target.value)}
-        >
-          <option value="entrada">Entrada</option>
-          <option value="saida">Saída</option>
-        </select>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Valor</label>
+            <input
+              type="text"
+              placeholder="R$ 0,00"
+              className="input"
+              value={valor}
+              onChange={(e) => handleValor(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Tipo</label>
+            <select
+              className="input"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+            >
+              <option value="entrada">Entrada</option>
+              <option value="saida">Saída</option>
+            </select>
+          </div>
+        </div>
 
         <button className="button-primary">
-          {editandoId ? "Salvar" : "Adicionar"}
+          {editandoId ? "Salvar alteração" : "Adicionar"}
         </button>
       </form>
 
@@ -99,7 +153,13 @@ export default function Transacoes({ transacoes, setTransacoes }) {
         <div key={t.id} className={`card ${t.tipo}`}>
           <div className="card-info">
             <strong>{t.descricao}</strong>
-            <span className="valor">R$ {t.valor.toFixed(2)}</span>
+
+            <span className="valor">
+              {t.valor.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
+            </span>
           </div>
 
           <div className="acoes">

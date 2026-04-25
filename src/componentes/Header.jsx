@@ -13,6 +13,7 @@ export default function Header() {
           <Link to="/" className="menu-btn">Início</Link>
           <Link to="/transacoes" className="menu-btn">Transações</Link>
           <Link to="/dashboard" className="menu-btn">Dashboard</Link>
+          <Link to="/historico" className="menu-btn">Histórico</Link>
         </nav>
 
       </div>
