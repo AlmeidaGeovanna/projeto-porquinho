@@ -1,17 +1,30 @@
-export default function ModalConfirmacao({ onConfirmar, onCancelar }) {
+export default function ModalConfirmacao({
+  onConfirmar,
+  onCancelar,
+  titulo = "Confirmar ação",
+  mensagem = "Tem certeza que deseja continuar?",
+  textoConfirmar = "Confirmar",
+  textoCancelar = "Cancelar"
+}) {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>Excluir transação</h2>
-        <p>Essa transação será excluída permanentemente.</p>
+        <h2>{titulo}</h2>
+        <p>{mensagem}</p>
 
         <div className="modal-botoes">
-          <button className="btn-cancelar" onClick={onCancelar}>
-            Cancelar
+          <button
+            className="btn-cancelar"
+            onClick={onCancelar}
+          >
+            {textoCancelar}
           </button>
 
-          <button className="btn-confirmar" onClick={onConfirmar}>
-            Excluir
+          <button
+            className="btn-confirmar"
+            onClick={onConfirmar}
+          >
+            {textoConfirmar}
           </button>
         </div>
       </div>

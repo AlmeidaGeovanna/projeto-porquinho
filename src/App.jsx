@@ -6,6 +6,7 @@ import Inicio from "./pages/Inicio";
 import Transacoes from "./pages/Transacoes";
 import Dashboard from "./pages/Dashboard";
 import Historico from "./pages/Historico";
+import Planejamento from "./pages/Planejamento";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +14,10 @@ import "./App.css";
 
 export default function App() {
   const [transacoes, setTransacoes] = useState([]);
+  const [planejamentos, setPlanejamentos] = useState(() => {
+  const salvo = localStorage.getItem("planejamentos");
+  return salvo ? JSON.parse(salvo) : [];
+});
 
   // 🔄 carregar do localStorage
   useEffect(() => {
@@ -51,6 +56,18 @@ export default function App() {
           path="/historico"
           element={<Historico transacoes={transacoes} />}
         />
+
+        <Route
+  path="/planejamento"
+  element={
+    <Planejamento
+      planejamentos={planejamentos}
+      setPlanejamentos={setPlanejamentos}
+      transacoes={transacoes}
+      setTransacoes={setTransacoes}
+    />
+  }
+/>
       </Routes>
 
       {/* TOAST */}

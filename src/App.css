@@ -635,3 +635,29 @@ html, body, #root {
 .dashboard-container .card-resumo {
   height: 90px;
 }
+.info-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.categoria {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.btn-pagar {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+
+  background: #22c55e; /* verde */
+  color: white;
+
+  transition: 0.2s;
+}
+
+.btn-pagar:hover {
+  opacity: 0.85;
+}

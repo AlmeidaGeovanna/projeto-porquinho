@@ -6,7 +6,7 @@ export default function Header() {
       <div className="nav-container">
 
         <h2 className="logo">
-          🐷 Cofrinho
+        Cofrinho
         </h2>
 
         <nav className="menu">
@@ -14,6 +14,7 @@ export default function Header() {
           <Link to="/transacoes" className="menu-btn">Transações</Link>
           <Link to="/dashboard" className="menu-btn">Dashboard</Link>
           <Link to="/historico" className="menu-btn">Histórico</Link>
+          <Link to="/planejamento" className="menu-btn">Planejamento</Link>
         </nav>
 
       </div>

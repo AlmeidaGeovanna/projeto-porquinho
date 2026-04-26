@@ -13,6 +13,16 @@ export default function Inicio() {
         <Link to="/dashboard" className="btn-home">
           Dashboard
         </Link>
+
+        <Link to="/historico" className="btn-home">
+          Histórico
+        </Link>
+
+        <Link to="/planejamento" className="btn-home">
+          Planejamento
+        </Link>
+
+        
       </div>
     </div>
   );
