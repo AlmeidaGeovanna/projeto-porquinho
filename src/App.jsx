@@ -15,9 +15,9 @@ import "./App.css";
 export default function App() {
   const [transacoes, setTransacoes] = useState([]);
   const [planejamentos, setPlanejamentos] = useState(() => {
-  const salvo = localStorage.getItem("planejamentos");
-  return salvo ? JSON.parse(salvo) : [];
-});
+    const salvo = localStorage.getItem("planejamentos");
+    return salvo ? JSON.parse(salvo) : [];
+  });
 
   // 🔄 carregar do localStorage
   useEffect(() => {
@@ -58,16 +58,16 @@ export default function App() {
         />
 
         <Route
-  path="/planejamento"
-  element={
-    <Planejamento
-      planejamentos={planejamentos}
-      setPlanejamentos={setPlanejamentos}
-      transacoes={transacoes}
-      setTransacoes={setTransacoes}
-    />
-  }
-/>
+          path="/planejamento"
+          element={
+            <Planejamento
+              planejamentos={planejamentos}
+              setPlanejamentos={setPlanejamentos}
+              transacoes={transacoes}
+              setTransacoes={setTransacoes}
+            />
+          }
+        />
       </Routes>
 
       {/* TOAST */}

@@ -7,7 +7,9 @@ body {
 }
 
 /* LAYOUT BASE */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -96,12 +98,12 @@ html, body, #root {
   text-align: center;
 
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .btn-home:hover {
   transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   background: linear-gradient(135deg, #2563eb, #4f46e5);
 }
 
@@ -145,7 +147,7 @@ html, body, #root {
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .card-info strong {
@@ -226,7 +228,7 @@ html, body, #root {
   border-radius: 16px;
   width: 320px;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
 .modal h2 {
@@ -270,7 +272,7 @@ html, body, #root {
 
 .btn-confirmar:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(239,68,68,0.4);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
 }
 
 /* FOOTER */
@@ -340,8 +342,9 @@ html, body, #root {
 /* HOVER */
 .dashboard-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
+
 /* FORM MAIS PROFISSIONAL */
 .form {
   background: #1e293b;
@@ -351,7 +354,7 @@ html, body, #root {
   flex-direction: column;
   gap: 15px;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* TÍTULO */
@@ -409,8 +412,9 @@ html, body, #root {
 
 .button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(59,130,246,0.4);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 }
+
 .form-row {
   display: flex;
   gap: 10px;
@@ -420,6 +424,7 @@ html, body, #root {
   flex: 1;
   min-width: 0;
 }
+
 /* FILTRO */
 .filtro {
   display: flex;
@@ -443,6 +448,7 @@ html, body, #root {
   color: #94a3b8;
   margin-top: 5px;
 }
+
 /* CONTAINER */
 .react-calendar {
   margin-top: 20px;
@@ -515,6 +521,7 @@ html, body, #root {
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #475569;
 }
+
 /* LAYOUT LADO A LADO */
 .dashboard-layout {
   display: flex;
@@ -546,7 +553,7 @@ html, body, #root {
   transition: all 0.25s ease;
 
   border: 1px solid #334155;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -556,12 +563,10 @@ html, body, #root {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.05),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
   opacity: 0;
   transition: 0.3s;
 }
@@ -600,9 +605,10 @@ html, body, #root {
 .card-resumo:hover {
   transform: translateY(-4px) scale(1.01);
   box-shadow:
-    0 15px 35px rgba(0,0,0,0.5),
-    0 0 10px rgba(59,130,246,0.15);
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(59, 130, 246, 0.15);
 }
+
 /* ================= DASHBOARD FIX FORÇADO ================= */
 
 .dashboard-container {
@@ -635,6 +641,7 @@ html, body, #root {
 .dashboard-container .card-resumo {
   height: 90px;
 }
+
 .info-texto {
   display: flex;
   flex-direction: column;
@@ -645,6 +652,7 @@ html, body, #root {
   font-size: 12px;
   opacity: 0.7;
 }
+
 .btn-pagar {
   padding: 8px 12px;
   border-radius: 8px;
@@ -652,7 +660,8 @@ html, body, #root {
   cursor: pointer;
   font-weight: 500;
 
-  background: #22c55e; /* verde */
+  background: #22c55e;
+  /* verde */
   color: white;
 
   transition: 0.2s;
@@ -660,4 +669,42 @@ html, body, #root {
 
 .btn-pagar:hover {
   opacity: 0.85;
+}
+
+/* Wrapper do date */
+.date-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Ajuste extra no input */
+.input-date {
+  padding-right: 42px;
+}
+
+/* Esconde ícone nativo */
+.input-date::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+}
+
+/* Ícone customizado */
+.calendar-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  /* mesmo roxo do botão */
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.resumo {
+  margin-top: 25px;
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 10px;
+  text-align: center;
 }

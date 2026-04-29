@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { FaCalendarAlt } from "react-icons/fa";
 import ModalConfirmacao from "../componentes/ModalConfirmacao";
 
 export default function Planejamento({
@@ -62,12 +63,12 @@ export default function Planejamento({
       const atualizados = planejamentos.map((p) =>
         p.id === editandoId
           ? {
-              ...p,
-              descricao,
-              valor: valorNumerico,
-              data,
-              categoria,
-            }
+            ...p,
+            descricao,
+            valor: valorNumerico,
+            data,
+            categoria,
+          }
           : p
       );
 
@@ -180,15 +181,21 @@ export default function Planejamento({
             />
           </div>
 
+
           <div className="form-group">
             <label>Data</label>
-            <input
-              type="date"
-              className="input"
-              value={data}
-              onChange={(e) => setData(e.target.value)}
-            />
+
+            <div className="date-wrapper">
+              <input
+                type="date"
+                className="input input-date"
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+              />
+              <FaCalendarAlt className="calendar-icon" />
+            </div>
           </div>
+
 
           <div className="form-group">
             <label>Categoria</label>
@@ -247,12 +254,12 @@ export default function Planejamento({
 
           <div className="acoes">
 
-             <button
+            <button
               className="btn-pagar"
               onClick={() => marcarComoPago(p)}>
               Pago
             </button>
-            
+
             <button
               className="btn-editar"
               onClick={() => editarPlanejamento(p)}
@@ -260,7 +267,7 @@ export default function Planejamento({
               Editar
             </button>
 
-           
+
 
             <button
               className="btn-excluir"
@@ -272,18 +279,17 @@ export default function Planejamento({
         </div>
       ))}
 
-     {modalAberto && (
-  <ModalConfirmacao
-    titulo="Excluir planejamento"
-    mensagem={`Deseja excluir "${
-      planejamentos.find(p => p.id === idParaExcluir)?.descricao || ""
-    }"?`}
-    textoConfirmar="Excluir"
-    textoCancelar="Cancelar"
-    onConfirmar={confirmarExclusao}
-    onCancelar={() => setModalAberto(false)}
-  />
-)}
+      {modalAberto && (
+        <ModalConfirmacao
+          titulo="Excluir planejamento"
+          mensagem={`Deseja excluir "${planejamentos.find(p => p.id === idParaExcluir)?.descricao || ""
+            }"?`}
+          textoConfirmar="Excluir"
+          textoCancelar="Cancelar"
+          onConfirmar={confirmarExclusao}
+          onCancelar={() => setModalAberto(false)}
+        />
+      )}
     </div>
   );
 }

@@ -63,12 +63,12 @@ export default function Transacoes({ transacoes, setTransacoes }) {
       const atualizadas = transacoes.map((t) =>
         t.id === editandoId
           ? {
-              ...t,
-              descricao,
-              valor: valorNumerico,
-              tipo,
-              categoria,
-            }
+            ...t,
+            descricao,
+            valor: valorNumerico,
+            tipo,
+            categoria,
+          }
           : t
       );
 
@@ -195,13 +195,19 @@ export default function Transacoes({ transacoes, setTransacoes }) {
       {transacoes.map((t) => (
         <div key={t.id} className={`card ${t.tipo}`}>
           <div className="card-info">
+
             <div className="info-texto">
               <strong>{t.descricao}</strong>
 
               <span className="categoria">
                 {t.categoria || "Outros"}
               </span>
+
+              <span className="data">
+                {new Date(t.data).toLocaleDateString("pt-BR")}
+              </span>
             </div>
+
 
             <span className="valor">
               {t.valor.toLocaleString("pt-BR", {
@@ -229,18 +235,17 @@ export default function Transacoes({ transacoes, setTransacoes }) {
         </div>
       ))}
 
-     {modalAberto && (
-  <ModalConfirmacao
-    titulo="Excluir transação"
-    mensagem={`Deseja excluir "${
-  transacoes.find(t => t.id === idParaExcluir)?.descricao
-}"?`}
-    textoConfirmar="Excluir"
-    textoCancelar="Cancelar"
-    onConfirmar={confirmarExclusao}
-    onCancelar={() => setModalAberto(false)}
-  />
-)}
+      {modalAberto && (
+        <ModalConfirmacao
+          titulo="Excluir transação"
+          mensagem={`Deseja excluir "${transacoes.find(t => t.id === idParaExcluir)?.descricao
+            }"?`}
+          textoConfirmar="Excluir"
+          textoCancelar="Cancelar"
+          onConfirmar={confirmarExclusao}
+          onCancelar={() => setModalAberto(false)}
+        />
+      )}
     </div>
   );
 }

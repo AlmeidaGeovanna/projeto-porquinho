@@ -22,7 +22,7 @@ export default function Inicio() {
           Planejamento
         </Link>
 
-        
+
       </div>
     </div>
   );
