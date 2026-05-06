@@ -13,7 +13,11 @@ export default function Transacoes({ transacoes, setTransacoes }) {
   const [modalAberto, setModalAberto] = useState(false);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
 
+<<<<<<< HEAD
   // 📂 Categorias separadas
+=======
+
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
   const categoriasEntrada = [
     "Salário",
     "Freelance",
@@ -29,13 +33,21 @@ export default function Transacoes({ transacoes, setTransacoes }) {
     "Outros"
   ];
 
+<<<<<<< HEAD
   // 🔁 Troca tipo + reseta categoria
+=======
+  
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
   function handleTipoChange(novoTipo) {
     setTipo(novoTipo);
     setCategoria("");
   }
 
+<<<<<<< HEAD
   // 💰 Máscara de valor
+=======
+  
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
   function handleValor(valorDigitado) {
     let numeros = valorDigitado.replace(/\D/g, "");
     let valorNumero = Number(numeros) / 100;
@@ -91,7 +103,11 @@ export default function Transacoes({ transacoes, setTransacoes }) {
       toast.success("Transação adicionada!");
     }
 
+<<<<<<< HEAD
     // reset
+=======
+    
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
     setDescricao("");
     setValor("");
     setTipo("entrada");

@@ -153,6 +153,10 @@ export default function Planejamento({
     <div className="container">
       <h2>Planejamento</h2>
 
+<<<<<<< HEAD
+=======
+      
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
       <form className="form" onSubmit={adicionarPlanejamento}>
         <h3 className="form-title">
           {editandoId ? "Editar planejamento" : "Novo planejamento"}
@@ -216,6 +220,7 @@ export default function Planejamento({
         </button>
       </form>
 
+<<<<<<< HEAD
       
      <div className="card-resumo">
   <p>Total previsto</p>
@@ -228,6 +233,20 @@ export default function Planejamento({
 </div>
 
     
+=======
+    
+      <div className="resumo">
+        <strong>
+          Total previsto:{" "}
+          {totalPrevisto.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })}
+        </strong>
+      </div>
+
+      
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
       {planejamentos.map((p) => (
         <div key={p.id} className="card">
           <div className="card-info">

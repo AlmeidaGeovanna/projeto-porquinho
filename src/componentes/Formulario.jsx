@@ -6,7 +6,11 @@ export default function Formulario({ onSubmit, editando }) {
   const [tipo, setTipo] = useState("entrada");
   const [categoria, setCategoria] = useState("");
 
+<<<<<<< HEAD
   // 📂 Categorias separadas
+=======
+  
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
   const categoriasEntrada = [
     "Salário",
     "Freelance",
@@ -31,7 +35,11 @@ export default function Formulario({ onSubmit, editando }) {
     }
   }, [editando]);
 
+<<<<<<< HEAD
   // 🔁 Troca tipo e limpa categoria
+=======
+  
+>>>>>>> 802c49952ef4f5294b6c0eebb4b200234d5ee8ad
   function handleTipoChange(novoTipo) {
     setTipo(novoTipo);
     setCategoria("");
