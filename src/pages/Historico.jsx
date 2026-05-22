@@ -13,35 +13,106 @@ export default function Historico({
   const [filtroTipo, setFiltroTipo] =
     useState("todas");
 
-  const dataSelecionadaFormatada =
-    dataSelecionada
-      .toISOString()
-      .split("T")[0];
+  const [periodo, setPeriodo] =
+    useState("dia");
 
-  const filtradas = transacoes.filter((t) => {
-    if (!t.data) return false;
+  function formatarData(data) {
+    const ano = data.getFullYear();
 
-    const mesmaData =
-      t.data === dataSelecionadaFormatada;
+    const mes = String(
+      data.getMonth() + 1
+    ).padStart(2, "0");
 
-    const matchBusca =
-      t.descricao
-        .toLowerCase()
-        .includes(
-          busca.toLowerCase()
-        );
+    const dia = String(
+      data.getDate()
+    ).padStart(2, "0");
 
-    const matchTipo =
-      filtroTipo === "todas"
-        ? true
-        : t.tipo === filtroTipo;
+    return `${ano}-${mes}-${dia}`;
+  }
 
-    return (
-      mesmaData &&
-      matchBusca &&
-      matchTipo
+  const dataFormatada =
+    formatarData(dataSelecionada);
+
+  const mesSelecionado =
+    dataFormatada.slice(0, 7);
+
+  const anoSelecionado =
+    dataFormatada.slice(0, 4);
+
+  const filtradas = transacoes
+    .filter((t) => {
+      if (!t.data) return false;
+
+      let matchPeriodo = false;
+
+      if (periodo === "dia") {
+        matchPeriodo =
+          t.data === dataFormatada;
+      }
+
+      if (periodo === "mes") {
+        matchPeriodo =
+          t.data.slice(0, 7) ===
+          mesSelecionado;
+      }
+
+      if (periodo === "ano") {
+        matchPeriodo =
+          t.data.slice(0, 4) ===
+          anoSelecionado;
+      }
+
+      if (periodo === "todas") {
+        matchPeriodo = true;
+      }
+
+      const matchBusca =
+        t.descricao
+          .toLowerCase()
+          .includes(
+            busca.toLowerCase()
+          );
+
+      const matchTipo =
+        filtroTipo === "todas"
+          ? true
+          : t.tipo === filtroTipo;
+
+      return (
+        matchPeriodo &&
+        matchBusca &&
+        matchTipo
+      );
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.data) -
+        new Date(a.data)
     );
-  });
+
+  const totalEntradas =
+    filtradas
+      .filter(
+        (t) => t.tipo === "entrada"
+      )
+      .reduce(
+        (acc, item) =>
+          acc + item.valor,
+        0
+      );
+
+  const totalSaidas = filtradas
+    .filter(
+      (t) => t.tipo === "saida"
+    )
+    .reduce(
+      (acc, item) =>
+        acc + item.valor,
+      0
+    );
+
+  const saldo =
+    totalEntradas - totalSaidas;
 
   return (
     <div className="container">
@@ -57,6 +128,64 @@ export default function Historico({
             setBusca(e.target.value)
           }
         />
+
+        <div className="tipo-filtros">
+          <button
+            type="button"
+            className={
+              periodo === "dia"
+                ? "filtro-btn ativo"
+                : "filtro-btn"
+            }
+            onClick={() =>
+              setPeriodo("dia")
+            }
+          >
+            Dia
+          </button>
+
+          <button
+            type="button"
+            className={
+              periodo === "mes"
+                ? "filtro-btn ativo"
+                : "filtro-btn"
+            }
+            onClick={() =>
+              setPeriodo("mes")
+            }
+          >
+            Mês
+          </button>
+
+          <button
+            type="button"
+            className={
+              periodo === "ano"
+                ? "filtro-btn ativo"
+                : "filtro-btn"
+            }
+            onClick={() =>
+              setPeriodo("ano")
+            }
+          >
+            Ano
+          </button>
+
+          <button
+            type="button"
+            className={
+              periodo === "todas"
+                ? "filtro-btn ativo"
+                : "filtro-btn"
+            }
+            onClick={() =>
+              setPeriodo("todas")
+            }
+          >
+            Todas
+          </button>
+        </div>
 
         <div className="tipo-filtros">
           <button
@@ -103,13 +232,64 @@ export default function Historico({
         </div>
       </div>
 
-      <Calendar
-        onChange={setDataSelecionada}
-        value={dataSelecionada}
-      />
+      {periodo !== "todas" && (
+        <Calendar
+          onChange={setDataSelecionada}
+          value={dataSelecionada}
+        />
+      )}
+<div className="resumo-historico">
+  <div className="resumo-card entradas">
+    <span className="resumo-label">
+      Entradas
+    </span>
+
+    <h3>
+      {totalEntradas.toLocaleString(
+        "pt-BR",
+        {
+          style: "currency",
+          currency: "BRL",
+        }
+      )}
+    </h3>
+  </div>
+
+  <div className="resumo-card saidas">
+    <span className="resumo-label">
+      Saídas
+    </span>
+
+    <h3>
+      {totalSaidas.toLocaleString(
+        "pt-BR",
+        {
+          style: "currency",
+          currency: "BRL",
+        }
+      )}
+    </h3>
+  </div>
+
+  <div className="resumo-card saldo">
+    <span className="resumo-label">
+      Saldo
+    </span>
+
+    <h3>
+      {saldo.toLocaleString(
+        "pt-BR",
+        {
+          style: "currency",
+          currency: "BRL",
+        }
+      )}
+    </h3>
+  </div>
+</div>
 
       <h3 style={{ marginTop: "20px" }}>
-        Transações do dia
+        Transações encontradas
       </h3>
 
       {filtradas.length === 0 && (
@@ -121,6 +301,7 @@ export default function Historico({
           key={t.id}
           className={`card ${t.tipo}`}
         >
+          
           <div className="card-info">
             <div className="info-texto">
               <strong>
