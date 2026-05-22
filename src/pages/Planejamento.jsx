@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { FaCalendarAlt } from "react-icons/fa";
+
 import ModalConfirmacao from "../componentes/ModalConfirmacao";
+import ModalEditarPlanejamento from "../componentes/ModalEditarPlanejamento";
 
 const categorias = [
   "Alimentação",
@@ -21,9 +23,13 @@ export default function Planejamento({
   const [valor, setValor] = useState("");
   const [data, setData] = useState("");
   const [categoria, setCategoria] = useState("");
-  const [editandoId, setEditandoId] = useState(null);
+
   const [modalAberto, setModalAberto] = useState(false);
   const [idParaExcluir, setIdParaExcluir] = useState(null);
+
+  const [modalEditarAberto, setModalEditarAberto] = useState(false);
+  const [planejamentoEditando, setPlanejamentoEditando] =
+    useState(null);
 
   function handleValor(valorDigitado) {
     const numeros = valorDigitado.replace(/\D/g, "");
@@ -49,7 +55,6 @@ export default function Planejamento({
     setValor("");
     setData("");
     setCategoria("");
-    setEditandoId(null);
   }
 
   function adicionarPlanejamento(e) {
@@ -68,56 +73,39 @@ export default function Planejamento({
       return;
     }
 
-    if (editandoId) {
-      const atualizados = planejamentos.map((p) =>
-        p.id === editandoId
-          ? {
-            ...p,
-            descricao,
-            valor: valorNumerico,
-            data,
-            categoria,
-          }
-          : p
-      );
+    const novoPlanejamento = {
+      id: Date.now(),
+      descricao,
+      valor: valorNumerico,
+      data,
+      categoria,
+    };
 
-      setPlanejamentos(atualizados);
+    setPlanejamentos((prev) => [
+      ...prev,
+      novoPlanejamento,
+    ]);
 
-      toast.info("Planejamento atualizado!");
-    } else {
-      const novoPlanejamento = {
-        id: Date.now(),
-        descricao,
-        valor: valorNumerico,
-        data,
-        categoria,
-      };
-
-      setPlanejamentos((prev) => [
-        ...prev,
-        novoPlanejamento,
-      ]);
-
-      toast.success("Conta planejada!");
-    }
+    toast.success("Conta planejada!");
 
     limparFormulario();
   }
 
   function editarPlanejamento(planejamento) {
-    setDescricao(planejamento.descricao);
+    setPlanejamentoEditando(planejamento);
+    setModalEditarAberto(true);
+  }
 
-    setValor(
-      planejamento.valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      })
+  function salvarEdicaoPlanejamento(atualizado) {
+    const atualizados = planejamentos.map((p) =>
+      p.id === atualizado.id ? atualizado : p
     );
 
-    setData(planejamento.data);
-    setCategoria(planejamento.categoria);
+    setPlanejamentos(atualizados);
 
-    setEditandoId(planejamento.id);
+    setModalEditarAberto(false);
+
+    toast.info("Planejamento atualizado!");
   }
 
   function abrirModal(id) {
@@ -145,10 +133,7 @@ export default function Planejamento({
       data: new Date().toISOString().split("T")[0],
     };
 
-    setTransacoes((prev) => [
-      ...prev,
-      novaTransacao,
-    ]);
+    setTransacoes((prev) => [...prev, novaTransacao]);
 
     setPlanejamentos((prev) =>
       prev.filter((p) => p.id !== item.id)
@@ -170,80 +155,52 @@ export default function Planejamento({
     <div className="container">
       <h2>Planejamento</h2>
 
-      <form
-        className="form"
-        onSubmit={adicionarPlanejamento}
-      >
-        <h3 className="form-title">
-          {editandoId
-            ? "Editar planejamento"
-            : "Novo planejamento"}
-        </h3>
+      {/* FORMULÁRIO NOVO */}
+      <form className="form" onSubmit={adicionarPlanejamento}>
+        <h3 className="form-title">Novo planejamento</h3>
 
         <div className="form-group">
           <label>Descrição</label>
-
           <input
-            type="text"
             className="input"
             value={descricao}
-            onChange={(e) =>
-              setDescricao(e.target.value)
-            }
+            onChange={(e) => setDescricao(e.target.value)}
           />
         </div>
 
         <div className="form-row">
           <div className="form-group">
             <label>Valor</label>
-
             <input
-              type="text"
-              placeholder="R$ 0,00"
               className="input"
               value={valor}
-              onChange={(e) =>
-                handleValor(e.target.value)
-              }
+              onChange={(e) => handleValor(e.target.value)}
             />
           </div>
 
           <div className="form-group">
             <label>Data</label>
-
             <div className="date-wrapper">
               <input
                 type="date"
                 className="input input-date"
                 value={data}
-                onChange={(e) =>
-                  setData(e.target.value)
-                }
+                onChange={(e) => setData(e.target.value)}
               />
-
               <FaCalendarAlt className="calendar-icon" />
             </div>
           </div>
 
           <div className="form-group">
             <label>Categoria</label>
-
             <select
               className="input"
               value={categoria}
-              onChange={(e) =>
-                setCategoria(e.target.value)
-              }
+              onChange={(e) => setCategoria(e.target.value)}
             >
-              <option value="">
-                Selecione
-              </option>
-
+              <option value="">Selecione</option>
               {categorias.map((cat) => (
-                <option
-                  key={cat}
-                  value={cat}
-                >
+                <option key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
@@ -251,19 +208,14 @@ export default function Planejamento({
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="button-primary"
-        >
-          {editandoId
-            ? "Salvar alteração"
-            : "Adicionar"}
+        <button className="button-primary">
+          Adicionar
         </button>
       </form>
 
+      {/* RESUMO */}
       <div className="card-resumo">
         <p>Total previsto</p>
-
         <h3>
           {totalPrevisto.toLocaleString("pt-BR", {
             style: "currency",
@@ -272,23 +224,15 @@ export default function Planejamento({
         </h3>
       </div>
 
+      {/* LISTA */}
       {planejamentosOrdenados.map((p) => (
-        <div
-          key={p.id}
-          className="card"
-        >
+        <div key={p.id} className="card">
           <div className="card-info">
             <div className="info-texto">
               <strong>{p.descricao}</strong>
-
-              <span className="categoria">
-                {p.categoria}
-              </span>
-
+              <span className="categoria">{p.categoria}</span>
               <span className="data">
-                {new Date(
-                  p.data
-                ).toLocaleDateString("pt-BR")}
+                {p.data.split("-").reverse().join("/")}
               </span>
             </div>
 
@@ -303,27 +247,21 @@ export default function Planejamento({
           <div className="acoes">
             <button
               className="btn-pagar"
-              onClick={() =>
-                marcarComoPago(p)
-              }
+              onClick={() => marcarComoPago(p)}
             >
               Pago
             </button>
 
             <button
               className="btn-editar"
-              onClick={() =>
-                editarPlanejamento(p)
-              }
+              onClick={() => editarPlanejamento(p)}
             >
               Editar
             </button>
 
             <button
               className="btn-excluir"
-              onClick={() =>
-                abrirModal(p.id)
-              }
+              onClick={() => abrirModal(p.id)}
             >
               Excluir
             </button>
@@ -331,19 +269,27 @@ export default function Planejamento({
         </div>
       ))}
 
+      {/* MODAL EXCLUSÃO */}
       {modalAberto && (
         <ModalConfirmacao
           titulo="Excluir planejamento"
-          mensagem={`Deseja excluir "${planejamentos.find(
-            (p) => p.id === idParaExcluir
-          )?.descricao || ""
-            }"?`}
+          mensagem={`Deseja excluir "${
+            planejamentos.find((p) => p.id === idParaExcluir)
+              ?.descricao || ""
+          }"?`}
           textoConfirmar="Excluir"
           textoCancelar="Cancelar"
           onConfirmar={confirmarExclusao}
-          onCancelar={() =>
-            setModalAberto(false)
-          }
+          onCancelar={() => setModalAberto(false)}
+        />
+      )}
+
+      {/* MODAL EDIÇÃO */}
+      {modalEditarAberto && planejamentoEditando && (
+        <ModalEditarPlanejamento
+          planejamento={planejamentoEditando}
+          onSalvar={salvarEdicaoPlanejamento}
+          onCancelar={() => setModalEditarAberto(false)}
         />
       )}
     </div>
