@@ -1027,3 +1027,93 @@ select:focus {
   border-left: 5px solid #3b82f6;
 }
 
+.titulo-transacoes {
+  margin-top: 8px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #f8fafc;
+
+  letter-spacing: -0.3px;
+}
+
+.estado-vazio {
+  margin-top: 10px;
+
+  padding: 32px 24px;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    145deg,
+    #1e293b,
+    #0f172a
+  );
+
+  border: 1px solid #334155;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0, 0, 0, 0.35);
+
+  text-align: center;
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.estado-vazio:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 15px 35px
+    rgba(0, 0, 0, 0.45);
+}
+
+.icone-vazio {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 18px;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 32px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.18),
+    rgba(99, 102, 241, 0.18)
+  );
+
+  border: 1px solid #334155;
+
+  color: #93c5fd;
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255, 255, 255, 0.04);
+}
+
+.estado-vazio h3 {
+  margin-bottom: 8px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #f8fafc;
+}
+
+.estado-vazio p {
+  color: #94a3b8;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}

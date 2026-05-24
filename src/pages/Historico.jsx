@@ -1,21 +1,8 @@
 import { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 
 export default function Historico({
   transacoes,
 }) {
-  const [dataSelecionada, setDataSelecionada] =
-    useState(new Date());
-
-  const [busca, setBusca] = useState("");
-
-  const [filtroTipo, setFiltroTipo] =
-    useState("todas");
-
-  const [periodo, setPeriodo] =
-    useState("dia");
-
   function formatarData(data) {
     const ano = data.getFullYear();
 
@@ -30,41 +17,37 @@ export default function Historico({
     return `${ano}-${mes}-${dia}`;
   }
 
-  const dataFormatada =
-    formatarData(dataSelecionada);
+  const hoje = new Date();
 
-  const mesSelecionado =
-    dataFormatada.slice(0, 7);
+  const [dataInicio, setDataInicio] =
+    useState(
+      formatarData(
+        new Date(
+          hoje.getFullYear(),
+          hoje.getMonth(),
+          1
+        )
+      )
+    );
 
-  const anoSelecionado =
-    dataFormatada.slice(0, 4);
+  const [dataFim, setDataFim] =
+    useState(formatarData(hoje));
+
+  const [busca, setBusca] =
+    useState("");
+
+  const [filtroTipo, setFiltroTipo] =
+    useState("todas");
 
   const filtradas = transacoes
     .filter((t) => {
       if (!t.data) return false;
 
-      let matchPeriodo = false;
-
-      if (periodo === "dia") {
-        matchPeriodo =
-          t.data === dataFormatada;
-      }
-
-      if (periodo === "mes") {
-        matchPeriodo =
-          t.data.slice(0, 7) ===
-          mesSelecionado;
-      }
-
-      if (periodo === "ano") {
-        matchPeriodo =
-          t.data.slice(0, 4) ===
-          anoSelecionado;
-      }
-
-      if (periodo === "todas") {
-        matchPeriodo = true;
-      }
+      const matchPeriodo =
+        (!dataInicio ||
+          t.data >= dataInicio) &&
+        (!dataFim ||
+          t.data <= dataFim);
 
       const matchBusca =
         t.descricao
@@ -129,62 +112,28 @@ export default function Historico({
           }
         />
 
-        <div className="tipo-filtros">
-          <button
-            type="button"
-            className={
-              periodo === "dia"
-                ? "filtro-btn ativo"
-                : "filtro-btn"
+        <div className="filtros-data">
+          <input
+            type="date"
+            className="input"
+            value={dataInicio}
+            onChange={(e) =>
+              setDataInicio(
+                e.target.value
+              )
             }
-            onClick={() =>
-              setPeriodo("dia")
-            }
-          >
-            Dia
-          </button>
+          />
 
-          <button
-            type="button"
-            className={
-              periodo === "mes"
-                ? "filtro-btn ativo"
-                : "filtro-btn"
+          <input
+            type="date"
+            className="input"
+            value={dataFim}
+            onChange={(e) =>
+              setDataFim(
+                e.target.value
+              )
             }
-            onClick={() =>
-              setPeriodo("mes")
-            }
-          >
-            Mês
-          </button>
-
-          <button
-            type="button"
-            className={
-              periodo === "ano"
-                ? "filtro-btn ativo"
-                : "filtro-btn"
-            }
-            onClick={() =>
-              setPeriodo("ano")
-            }
-          >
-            Ano
-          </button>
-
-          <button
-            type="button"
-            className={
-              periodo === "todas"
-                ? "filtro-btn ativo"
-                : "filtro-btn"
-            }
-            onClick={() =>
-              setPeriodo("todas")
-            }
-          >
-            Todas
-          </button>
+          />
         </div>
 
         <div className="tipo-filtros">
@@ -205,12 +154,15 @@ export default function Historico({
           <button
             type="button"
             className={
-              filtroTipo === "entrada"
+              filtroTipo ===
+              "entrada"
                 ? "filtro-btn ativo"
                 : "filtro-btn"
             }
             onClick={() =>
-              setFiltroTipo("entrada")
+              setFiltroTipo(
+                "entrada"
+              )
             }
           >
             Entradas
@@ -232,76 +184,83 @@ export default function Historico({
         </div>
       </div>
 
-      {periodo !== "todas" && (
-        <Calendar
-          onChange={setDataSelecionada}
-          value={dataSelecionada}
-        />
-      )}
-<div className="resumo-historico">
-  <div className="resumo-card entradas">
-    <span className="resumo-label">
-      Entradas
-    </span>
+      <div className="resumo-historico">
+        <div className="resumo-card entradas">
+          <span className="resumo-label">
+            Entradas
+          </span>
+
+          <h3>
+            {totalEntradas.toLocaleString(
+              "pt-BR",
+              {
+                style: "currency",
+                currency: "BRL",
+              }
+            )}
+          </h3>
+        </div>
+
+        <div className="resumo-card saidas">
+          <span className="resumo-label">
+            Saídas
+          </span>
+
+          <h3>
+            {totalSaidas.toLocaleString(
+              "pt-BR",
+              {
+                style: "currency",
+                currency: "BRL",
+              }
+            )}
+          </h3>
+        </div>
+
+        <div className="resumo-card saldo">
+          <span className="resumo-label">
+            Saldo
+          </span>
+
+          <h3>
+            {saldo.toLocaleString(
+              "pt-BR",
+              {
+                style: "currency",
+                currency: "BRL",
+              }
+            )}
+          </h3>
+        </div>
+      </div>
+
+   {filtradas.length > 0 ? (
+  <h3 className="titulo-transacoes">
+    Transações encontradas
+  </h3>
+) : (
+  <div className="estado-vazio">
+    <div className="icone-vazio">
+      💸
+    </div>
 
     <h3>
-      {totalEntradas.toLocaleString(
-        "pt-BR",
-        {
-          style: "currency",
-          currency: "BRL",
-        }
-      )}
+      Nenhuma transação encontrada
     </h3>
+
+    <p>
+      Tente alterar os filtros
+      ou adicionar novas
+      transações.
+    </p>
   </div>
-
-  <div className="resumo-card saidas">
-    <span className="resumo-label">
-      Saídas
-    </span>
-
-    <h3>
-      {totalSaidas.toLocaleString(
-        "pt-BR",
-        {
-          style: "currency",
-          currency: "BRL",
-        }
-      )}
-    </h3>
-  </div>
-
-  <div className="resumo-card saldo">
-    <span className="resumo-label">
-      Saldo
-    </span>
-
-    <h3>
-      {saldo.toLocaleString(
-        "pt-BR",
-        {
-          style: "currency",
-          currency: "BRL",
-        }
-      )}
-    </h3>
-  </div>
-</div>
-
-      <h3 style={{ marginTop: "20px" }}>
-        Transações encontradas
-      </h3>
-
-      {filtradas.length === 0 && (
-        <p>Nenhuma transação</p>
-      )}
+)}
 
       {filtradas.map((t) => (
         <div
           key={t.id}
           className={`card ${t.tipo}`}
         >
-          
           <div className="card-info">
             <div className="info-texto">
               <strong>
