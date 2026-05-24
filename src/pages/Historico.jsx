@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCalendarAlt } from "react-icons/fa";
 
 export default function Historico({
   transacoes,
@@ -46,8 +47,7 @@ export default function Historico({
       const matchPeriodo =
         (!dataInicio ||
           t.data >= dataInicio) &&
-        (!dataFim ||
-          t.data <= dataFim);
+        (!dataFim || t.data <= dataFim);
 
       const matchBusca =
         t.descricao
@@ -113,27 +113,35 @@ export default function Historico({
         />
 
         <div className="filtros-data">
-          <input
-            type="date"
-            className="input"
-            value={dataInicio}
-            onChange={(e) =>
-              setDataInicio(
-                e.target.value
-              )
-            }
-          />
+          <div className="date-wrapper">
+            <input
+              type="date"
+              className="input input-date"
+              value={dataInicio}
+              onChange={(e) =>
+                setDataInicio(
+                  e.target.value
+                )
+              }
+            />
 
-          <input
-            type="date"
-            className="input"
-            value={dataFim}
-            onChange={(e) =>
-              setDataFim(
-                e.target.value
-              )
-            }
-          />
+            <FaCalendarAlt className="calendar-icon" />
+          </div>
+
+          <div className="date-wrapper">
+            <input
+              type="date"
+              className="input input-date"
+              value={dataFim}
+              onChange={(e) =>
+                setDataFim(
+                  e.target.value
+                )
+              }
+            />
+
+            <FaCalendarAlt className="calendar-icon" />
+          </div>
         </div>
 
         <div className="tipo-filtros">
@@ -154,15 +162,12 @@ export default function Historico({
           <button
             type="button"
             className={
-              filtroTipo ===
-              "entrada"
+              filtroTipo === "entrada"
                 ? "filtro-btn ativo"
                 : "filtro-btn"
             }
             onClick={() =>
-              setFiltroTipo(
-                "entrada"
-              )
+              setFiltroTipo("entrada")
             }
           >
             Entradas
@@ -234,64 +239,66 @@ export default function Historico({
         </div>
       </div>
 
-   {filtradas.length > 0 ? (
-  <h3 className="titulo-transacoes">
-    Transações encontradas
-  </h3>
-) : (
-  <div className="estado-vazio">
-    <div className="icone-vazio">
-      💸
-    </div>
+      {filtradas.length > 0 ? (
+        <>
+          <h3 className="titulo-transacoes">
+            Transações encontradas
+          </h3>
 
-    <h3>
-      Nenhuma transação encontrada
-    </h3>
+          {filtradas.map((t) => (
+            <div
+              key={t.id}
+              className={`card ${t.tipo}`}
+            >
+              <div className="card-info">
+                <div className="info-texto">
+                  <strong>
+                    {t.descricao}
+                  </strong>
 
-    <p>
-      Tente alterar os filtros
-      ou adicionar novas
-      transações.
-    </p>
-  </div>
-)}
+                  <span className="categoria">
+                    {t.categoria ||
+                      "Outros"}
+                  </span>
 
-      {filtradas.map((t) => (
-        <div
-          key={t.id}
-          className={`card ${t.tipo}`}
-        >
-          <div className="card-info">
-            <div className="info-texto">
-              <strong>
-                {t.descricao}
-              </strong>
+                  <span className="data">
+                    {t.data
+                      .split("-")
+                      .reverse()
+                      .join("/")}
+                  </span>
+                </div>
 
-              <span className="categoria">
-                {t.categoria ||
-                  "Outros"}
-              </span>
-
-              <span className="data">
-                {t.data
-                  .split("-")
-                  .reverse()
-                  .join("/")}
-              </span>
+                <span className="valor">
+                  {t.valor.toLocaleString(
+                    "pt-BR",
+                    {
+                      style:
+                        "currency",
+                      currency: "BRL",
+                    }
+                  )}
+                </span>
+              </div>
             </div>
-
-            <span className="valor">
-              {t.valor.toLocaleString(
-                "pt-BR",
-                {
-                  style: "currency",
-                  currency: "BRL",
-                }
-              )}
-            </span>
+          ))}
+        </>
+      ) : (
+        <div className="estado-vazio">
+          <div className="icone-vazio">
+            💸
           </div>
+
+          <h3>
+            Nenhuma transação encontrada
+          </h3>
+
+          <p>
+            Tente ajustar o período
+            ou os filtros.
+          </p>
         </div>
-      ))}
+      )}
     </div>
   );
 }
