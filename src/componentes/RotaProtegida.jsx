@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { estaLogado } from "../utils/autenticacao";
+import { estaLogado } from "../utils/Autenticacao";
 
 export default function RotaProtegida({
   children,

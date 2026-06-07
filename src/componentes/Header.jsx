@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import {
   logout,
   getUsuarioLogado,
-} from "../utils/autenticacao";
+} from "../utils/Autenticacao";
 
 export default function Header() {
   const [aberto, setAberto] = useState(false);
