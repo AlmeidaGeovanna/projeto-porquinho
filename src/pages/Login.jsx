@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login } from "../utils/autenticacao";
+import { login } from "../utils/Autenticacao";
 
 export default function Login() {
   const navigate = useNavigate();
