@@ -12,33 +12,25 @@ export default function Login() {
 function handleSubmit(e) {
   e.preventDefault();
 
-  if (
-  !email.trim() ||
-  !senha.trim()
-) {
-  toast.error(
-    "Preencha email e senha."
-  );
-
-  return;
-}
+  if (!email.trim() || !senha.trim()) {
+    toast.error("Preencha email e senha.");
+    return;
+  }
 
   try {
-   const usuario = login(
-   email.trim().toLowerCase(),
-   senha
-);
+    const usuario = login(
+      email.trim().toLowerCase(),
+      senha
+    );
 
-   toast.success(
-  `Bem-vindo(a), ${usuario.nome}!`
-);
+    toast.success(`Bem-vindo(a), ${usuario.nome}!`);
 
-setEmail("");
-setSenha("");
+    setEmail("");
+    setSenha("");
 
-setTimeout(() => {
-  navigate("/");
-}, 1200);
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1200);
 
   } catch (err) {
     toast.error(err.message);

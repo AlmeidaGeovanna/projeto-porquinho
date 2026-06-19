@@ -16,37 +16,32 @@ import RotaProtegida from "./componentes/RotaProtegida";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { getUsuarioLogado } from "./utils/Autenticacao";
+
 import "./App.css";
 
 export default function App() {
-  const [transacoes, setTransacoes] = useState([]);
+  const usuario = getUsuarioLogado();
+  const chaveTransacoes = usuario ? `transacoes_${usuario.email}` : "transacoes";
+  const chavePlanejamentos = usuario ? `planejamentos_${usuario.email}` : "planejamentos";
+
+  const [transacoes, setTransacoes] = useState(() => {
+    const salvo = localStorage.getItem(chaveTransacoes);
+    return salvo ? JSON.parse(salvo) : [];
+  });
 
   const [planejamentos, setPlanejamentos] = useState(() => {
-    const salvo = localStorage.getItem("planejamentos");
+    const salvo = localStorage.getItem(chavePlanejamentos);
     return salvo ? JSON.parse(salvo) : [];
   });
 
   useEffect(() => {
-    const dados = localStorage.getItem("transacoes");
-
-    if (dados) {
-      setTransacoes(JSON.parse(dados));
-    }
-  }, []);
+    localStorage.setItem(chaveTransacoes, JSON.stringify(transacoes));
+  }, [transacoes, chaveTransacoes]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "transacoes",
-      JSON.stringify(transacoes)
-    );
-  }, [transacoes]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "planejamentos",
-      JSON.stringify(planejamentos)
-    );
-  }, [planejamentos]);
+    localStorage.setItem(chavePlanejamentos, JSON.stringify(planejamentos));
+  }, [planejamentos, chavePlanejamentos]);
 
   return (
     <Layout>
